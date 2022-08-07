@@ -5,14 +5,11 @@ import (
 	"net/http"
 )
 
-func handlerFunc(w http.ResponseWriter, r *http.Request) {
+func defaultHandlerFunc(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "text/html; charset=utf-8")
 
 	if r.URL.Path == "/" {
 		fmt.Fprint(w, "<h1>Hello 这里是 golang</h1>")
-	} else if r.URL.Path == "/about" {
-		fmt.Fprint(w, "此博客是用以记录编程笔记，如您有反馈或建议，请联系 "+
-			"<a href=\"mailto:summer@example.com\">summer@example.com</a>")
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 
@@ -21,7 +18,18 @@ func handlerFunc(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func aboutHandlerFunc(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "text/html; charset=utf-8")
+
+	fmt.Fprint(w, "此博客是用以记录编程笔记，如您有反馈或建议，请联系 "+
+		"<a href=\"mailto:summer@example.com\">summer@example.com</a>")
+}
+
 func main() {
-	http.HandleFunc("/", handlerFunc)
-	http.ListenAndServe(":3000", nil)
+	router := http.NewServeMux()
+
+	router.HandleFunc("/", defaultHandlerFunc)
+	router.HandleFunc("/about", aboutHandlerFunc)
+
+	http.ListenAndServe(":3000", router)
 }
