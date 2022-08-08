@@ -24,6 +24,17 @@ type Article struct {
 	ID          int64
 }
 
+func (article Article) Link() string {
+	url, err := router.Get("articles.show").URL("id", strconv.FormatInt(article.ID, 10))
+
+	if err != nil {
+		checkError(err)
+		return ""
+	}
+
+	return url.String()
+}
+
 type ArticlesFormData struct {
 	Title, Body string
 	URL         *url.URL
@@ -112,7 +123,30 @@ func articlesShowHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func articlesIndexHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "访问文章列表")
+	rows, err := db.Query("SELECT * FROM articles")
+	checkError(err)
+
+	defer rows.Close()
+
+	var articles []Article
+
+	for rows.Next() {
+		var article Article
+
+		err := rows.Scan(&article.ID, &article.Title, &article.Body)
+		checkError(err)
+
+		articles = append(articles, article)
+	}
+
+	err = rows.Err()
+	checkError(err)
+
+	tmpl, err := template.ParseFiles("resources/views/articles/index.gohtml")
+	checkError(err)
+
+	err = tmpl.Execute(w, articles)
+	checkError(err)
 }
 
 func articlesStoreHandler(w http.ResponseWriter, r *http.Request) {
@@ -282,7 +316,7 @@ func articlesUpdateHandler(w http.ResponseWriter, r *http.Request) {
 		errors := validateArticleFormData(title, body)
 
 		if len(errors) == 0 {
-			query := "UPDATE articles SET title = ? AND body = ? WHERE id = ?"
+			query := "UPDATE articles SET title = ? , body = ? WHERE id = ?"
 			rs, err := db.Exec(query, title, body, id)
 
 			if err != nil {
@@ -358,7 +392,7 @@ func main() {
 
 	router.HandleFunc("/articles/{id:[0-9]+}", articlesShowHandler).Methods("GET").Name("articles.show")
 	router.HandleFunc("/articles/{id:[0-9]+}/edit", articlesEditHandler).Methods("GET").Name("articles.edit")
-	router.HandleFunc("/articles/{id:[0-9]+}/edit", articlesUpdateHandler).Methods("POST").Name("articles.update")
+	router.HandleFunc("/articles/{id:[0-9]+}/update", articlesUpdateHandler).Methods("POST").Name("articles.update")
 	router.HandleFunc("/articles", articlesIndexHandler).Methods("GET").Name("articles.index")
 	router.HandleFunc("/articles", articlesStoreHandler).Methods("POST").Name("articles.store")
 	router.HandleFunc("/articles/create", articlesCreateHandler).Methods("GET").Name("articles.create")
