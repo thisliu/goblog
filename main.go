@@ -23,17 +23,6 @@ type Article struct {
 	ID          int64
 }
 
-func (article Article) Link() string {
-	url, err := router.Get("articles.show").URL("id", strconv.FormatInt(article.ID, 10))
-
-	if err != nil {
-		logger.LogError(err)
-		return ""
-	}
-
-	return url.String()
-}
-
 func (article Article) Delete() (rowsAffected int64, err error) {
 	rs, err := db.Exec("DELETE FROM articles WHERE id =" + strconv.FormatInt(article.ID, 10))
 
@@ -66,33 +55,6 @@ func aboutHandler(w http.ResponseWriter, r *http.Request) {
 func notFoundHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotFound)
 	fmt.Fprint(w, "<h1>请求页面未找到 :(</h1><p>如有疑惑，请联系我们。</p>")
-}
-
-func articlesIndexHandler(w http.ResponseWriter, r *http.Request) {
-	rows, err := db.Query("SELECT * FROM articles")
-	logger.LogError(err)
-
-	defer rows.Close()
-
-	var articles []Article
-
-	for rows.Next() {
-		var article Article
-
-		err := rows.Scan(&article.ID, &article.Title, &article.Body)
-		logger.LogError(err)
-
-		articles = append(articles, article)
-	}
-
-	err = rows.Err()
-	logger.LogError(err)
-
-	tmpl, err := template.ParseFiles("resources/views/articles/index.gohtml")
-	logger.LogError(err)
-
-	err = tmpl.Execute(w, articles)
-	logger.LogError(err)
 }
 
 func articlesStoreHandler(w http.ResponseWriter, r *http.Request) {
@@ -373,7 +335,6 @@ func main() {
 	router.HandleFunc("/articles/{id:[0-9]+}/edit", articlesEditHandler).Methods("GET").Name("articles.edit")
 	router.HandleFunc("/articles/{id:[0-9]+}", articlesUpdateHandler).Methods("POST").Name("articles.update")
 	router.HandleFunc("/articles/{id:[0-9]+}/delete", articlesDeleteHandler).Methods("POST").Name("articles.delete")
-	router.HandleFunc("/articles", articlesIndexHandler).Methods("GET").Name("articles.index")
 	router.HandleFunc("/articles", articlesStoreHandler).Methods("POST").Name("articles.store")
 	router.HandleFunc("/articles/create", articlesCreateHandler).Methods("GET").Name("articles.create")
 
