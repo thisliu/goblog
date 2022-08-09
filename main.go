@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"goblog/bootstrap"
-	"goblog/pkg/database"
 	"goblog/pkg/logger"
 	"html/template"
 	"net/http"
@@ -368,9 +367,7 @@ func getRouteVariable(parameterName string, r *http.Request) string {
 }
 
 func main() {
-	database.Initialize()
-	db = database.DB
-
+	bootstrap.SetupDB()
 	router = bootstrap.SetupRoute()
 
 	router.HandleFunc("/articles/{id:[0-9]+}/edit", articlesEditHandler).Methods("GET").Name("articles.edit")
