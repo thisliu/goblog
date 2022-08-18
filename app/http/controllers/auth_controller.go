@@ -41,6 +41,7 @@ func (*AuthController) DoRegister(w http.ResponseWriter, r *http.Request) {
 		articlesIndexUrl := route.Name2URL("articles.index")
 
 		if _user.ID > 0 {
+			auth.Login(_user)
 			http.Redirect(w, r, articlesIndexUrl, http.StatusFound)
 		} else {
 			w.WriteHeader(http.StatusInternalServerError)
