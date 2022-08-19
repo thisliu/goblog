@@ -20,7 +20,7 @@ func Get(idstr string) (Article, error) {
 // GetAll 获取全部文章
 func GetAll() ([]Article, error) {
 	var articles []Article
-	if err := model.DB.Find(&articles).Error; err != nil {
+	if err := model.DB.Order("created_at desc").Find(&articles).Error; err != nil {
 		return articles, err
 	}
 	return articles, nil
