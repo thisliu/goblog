@@ -1,7 +1,11 @@
 {{define "sidebar"}}
 <div class="col-md-3 blog-sidebar">
   <div class="p-4 mb-3 bg-white rounded shadow-sm">
-    <h1><a href="{{ RouteName2URL "articles.index" }}" class="link-dark text-decoration-none">阿豪，加油💪</a></h1>
+    <h1><a href="{{ RouteName2URL "articles.index" }}" class="link-dark text-decoration-none">
+    {{ if .loginUser }}
+    {{ .loginUser.Name }}💪
+    {{ end }}
+    </a></h1>
   </div>
 
   <div class="p-4 bg-white rounded shadow-sm mb-3">
@@ -13,13 +17,16 @@
     </ol>
   </div>
 
+  {{ if .Users }}
   <div class="p-4 bg-white rounded shadow-sm mb-3">
     <h5>作者</h5>
     <ol class="list-unstyled mb-0">
-      <li><a href="https://github.com/summerblue">Summer</a></li>
-      <li><a href="https://github.com/thisliu">thisliu</a></li>
+      {{ range $key, $user := .Users }}
+        <li><a href="{{ $user.Link }}">{{ $user.Name }}</a></li>
+      {{ end }}
     </ol>
   </div>
+  {{ end }}
 
 <div class="p-4 bg-white rounded shadow-sm mb-3">
     <h5>链接</h5>
