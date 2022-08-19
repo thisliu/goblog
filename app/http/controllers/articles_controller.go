@@ -5,7 +5,7 @@ import (
 	"goblog/app/models/article"
 	"goblog/pkg/logger"
 	"goblog/pkg/route"
-	view "goblog/resources/views"
+	"goblog/pkg/view"
 	"net/http"
 	"unicode/utf8"
 
