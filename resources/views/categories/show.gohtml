@@ -1,0 +1,16 @@
+{{define "title"}}
+文章分类
+{{end}}
+
+{{define "main"}}
+<div class="col-md-9 blog-main">
+  <div class="blog-post bg-white p-5 rounded shadow mb-4">
+
+    <h3>文章分类</h3>
+
+    {{ .Category.Name }}
+
+  </div><!-- /.blog-post -->
+</div>
+
+{{end}}

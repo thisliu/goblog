@@ -42,3 +42,17 @@ func (*CategoriesController) Store(w http.ResponseWriter, r *http.Request) {
 		}, "categories.create")
 	}
 }
+
+func (ca *CategoriesController) Show(w http.ResponseWriter, r *http.Request) {
+	id := route.GetRouteVariable("id", r)
+
+	_category, err := category.Get(id)
+
+	if err != nil {
+		ca.ResponseForSQLError(w, err)
+	} else {
+		view.Render(w, view.D{
+			"Category": _category,
+		}, "categories.show")
+	}
+}
