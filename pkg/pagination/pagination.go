@@ -106,7 +106,7 @@ func (p Pagination) NewPage(page int) Page {
 
 	return Page{
 		Number: page,
-		URL:    template.URL(config.GetString("app.http_schema") + "://" + p.BaseURL + strconv.Itoa(page)),
+		URL:    template.URL(p.BaseURL + strconv.Itoa(page)),
 	}
 }
 

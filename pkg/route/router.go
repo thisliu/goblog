@@ -3,6 +3,7 @@ package route
 import (
 	"goblog/pkg/config"
 	"goblog/pkg/logger"
+	"html/template"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -23,7 +24,18 @@ func Name2URL(routeName string, pairs ...string) string {
 		return ""
 	}
 
-	return config.GetString("app.url") + url.String()
+	return "http://" + config.GetString("app.url") + url.String()
+}
+
+// Name2URL 通过路由名称来获取 URL
+func Name2TemplateURL(routeName string, pairs ...string) template.URL {
+	url, err := route.Get(routeName).URL(pairs...)
+	if err != nil {
+		logger.LogError(err)
+		return ""
+	}
+
+	return template.URL("http://" + config.GetString("app.url") + url.String())
 }
 
 // GetRouteVariable 获取 URI 路由参数
