@@ -18,6 +18,8 @@ func init() {
 
 		"url": config.Env("APP_URL", "127.0.0.1:3000"),
 
+		"http_schema": config.Env("HTTP_SCHEMA", "http"),
+
 		// gorilla/sessions 在 Cookie 中加密数据时使用
 		"key": config.Env("APP_KEY", "33446a9dcf9ea060a0a6532b166da32f304af0de"),
 	})
