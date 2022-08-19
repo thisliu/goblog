@@ -5,6 +5,10 @@
 {{define "main"}}
 <div class="col-md-9 blog-main">
 
+  {{ if eq (len .Articles) 0 }}
+    暂无文章...
+  {{ end }}
+
   {{ range $key, $article := .Articles }}
 
     <div class="blog-post bg-white p-5 rounded shadow mb-4">

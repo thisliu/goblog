@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"goblog/app/models/article"
 	"goblog/app/models/category"
 	"goblog/app/requests"
 	"goblog/pkg/flash"
@@ -50,9 +51,17 @@ func (ca *CategoriesController) Show(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		ca.ResponseForSQLError(w, err)
+	}
+
+	articles, pagerData, err := article.GetByCategoryID(_category.GetStringID(), r, 2)
+
+	if err != nil {
+		ca.ResponseForSQLError(w, err)
 	} else {
+		// ---  2. 加载模板 ---
 		view.Render(w, view.D{
-			"Category": _category,
-		}, "categories.show")
+			"Articles":  articles,
+			"PagerData": pagerData,
+		}, "articles.index", "articles._article_meta")
 	}
 }
