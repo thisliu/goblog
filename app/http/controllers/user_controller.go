@@ -17,7 +17,6 @@ type UserController struct {
 
 // Show 用户个人页面
 func (uc *UserController) Show(w http.ResponseWriter, r *http.Request) {
-
 	// 1. 获取 URL 参数
 	id := route.GetRouteVariable("id", r)
 
