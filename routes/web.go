@@ -47,7 +47,11 @@ func RegisterWebRoutes(r *mux.Router) {
 
 	// 标签相关
 	r.HandleFunc("/categories/create", middlewares.Auth(cc.Create)).Methods("GET").Name("categories.create")
+	r.HandleFunc("/categories/{id:[0-9]+}/edit", middlewares.Auth(cc.Edit)).Methods("GET").Name("categories.edit")
+	r.HandleFunc("/categories/{id:[0-9]+}/articles", middlewares.Auth(cc.Articles)).Methods("GET").Name("categories.articles")
 	r.HandleFunc("/categories/{id:[0-9]+}", middlewares.Auth(cc.Show)).Methods("GET").Name("categories.show")
+	r.HandleFunc("/categories/{id:[0-9]+}/update", middlewares.Auth(cc.Update)).Methods("POST").Name("categories.update")
+	r.HandleFunc("/categories/{id:[0-9]+}/delete", middlewares.Auth(cc.Delete)).Methods("POST").Name("categories.delete")
 	r.HandleFunc("/categories", middlewares.Auth(cc.Store)).Methods("POST").Name("categories.store")
 
 	// 开始会话

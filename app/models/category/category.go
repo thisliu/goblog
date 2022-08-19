@@ -14,3 +14,7 @@ type Category struct {
 func (category Category) Link() string {
 	return route.Name2URL("categories.show", "id", category.GetStringID())
 }
+
+func (category Category) ArticlesLink() string {
+	return route.Name2URL("categories.articles", "id", category.GetStringID())
+}

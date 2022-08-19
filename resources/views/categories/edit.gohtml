@@ -8,8 +8,7 @@
 
     <h3>更新文章分类</h3>
 
-    <form action="{{ RouteName2URL "categories.store" }}" method="post">
-
+    <form action="{{ RouteName2URL "categories.update" "id" .Category.GetStringID }}" method="post">
       <div class="form-group mt-3">
         <label for="title">分类名称</label>
         <input type="text" class="form-control {{if .Errors.name }}is-invalid {{end}}" name="name" value="{{ .Category.Name }}" required>

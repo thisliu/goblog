@@ -92,7 +92,6 @@ func (*ArticlesController) Store(w http.ResponseWriter, r *http.Request) {
 
 // Edit 文章更新页面
 func (ac *ArticlesController) Edit(w http.ResponseWriter, r *http.Request) {
-
 	// 1. 获取 URL 参数
 	id := route.GetRouteVariable("id", r)
 
@@ -136,7 +135,6 @@ func (ac *ArticlesController) Update(w http.ResponseWriter, r *http.Request) {
 		if !policies.CanModifyArticle(_article) {
 			ac.ResponseForUnauthorized(w, r)
 		} else {
-
 			// 4.1 表单验证
 			_article.Title = r.PostFormValue("title")
 			_article.Body = r.PostFormValue("body")
